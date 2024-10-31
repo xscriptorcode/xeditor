@@ -37,12 +37,12 @@ La aplicación está en proceso de implementar soporte para una variedad de tipo
 1. Clona este repositorio:
 
       ```bash
-   git clone https://github.com/<tu-usuario>/mi-editor-texto.git
+   git clone https://github.com/xscriptorcode/xeditor
    ```
 2. Navega al directorio del proyecto:
 
    ```bash
-   cd mi-editor-texto
+   cd xeditor
    ```
 3. Instala las dependencias de Flutter:
 
