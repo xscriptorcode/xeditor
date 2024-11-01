@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:xeditor/services/docx_reader.dart';
+import 'package:xeditor/services/doc_reader.dart';
 import 'editor_layout.dart';
 import 'editor_controller.dart';
 import 'document_manager.dart';
@@ -15,10 +15,20 @@ class EditorArea extends StatefulWidget {
 
 class _EditorAreaState extends State<EditorArea> {
   void openPdfViewer(String pdfPath) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => PdfViewer(pdfPath: pdfPath),
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("Visor PDF"),
+        content: Container(
+          width: double.maxFinite,
+          child: PdfViewerPage(pdfPath: pdfPath),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text("Cerrar"),
+          ),
+        ],
       ),
     );
   }
@@ -27,7 +37,6 @@ class _EditorAreaState extends State<EditorArea> {
   late DocumentManager _documentManager;
   bool isDocumentOpen = false;
   String? path;
-  String docxContent = "Cargando...";
 
   @override
   void initState() {
@@ -42,65 +51,59 @@ class _EditorAreaState extends State<EditorArea> {
     super.dispose();
   }
 
-  Future<void> loadDocxContent(String filePath) async {
-    final reader = DocxReader();
-    final content = await reader.readDocxText(filePath);
+  Future<void> loadDocumentContent(String filePath) async {
+    final reader = DocumentReader();
+    final content = await reader.readDocument(filePath);
     setState(() {
-      docxContent = content;
+      _editorController.setContent(content); // Cargar contenido en el área de edición
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: EditorLayout(
-            editorController: _editorController,
-            customButtons: [
-              quill.QuillToolbarCustomButtonOptions(
-                icon: Icon(Icons.save),
-                tooltip: 'Guardar',
-                onPressed: _documentManager.saveDocument,
-              ),
-              quill.QuillToolbarCustomButtonOptions(
-                icon: Icon(Icons.save_as),
-                tooltip: 'Guardar como',
-                onPressed: _documentManager.saveDocumentAs,
-              ),
-              quill.QuillToolbarCustomButtonOptions(
-                icon: Icon(Icons.folder_open),
-                tooltip: 'Abrir',
-                onPressed: () async {
-                  await _documentManager.openDocument();
-                  path = _editorController.filePath;
-                  setState(() {
-                    isDocumentOpen = path != null;
-                  });
-
-                  if (isDocumentOpen && path != null && path!.endsWith('.docx')) {
-                    await loadDocxContent(path!);
-                  } else {
-                    // Manejar otros tipos de archivos.
-                  }
-                },
-              ),
-            ],
-            title: _editorController.documentName.isNotEmpty
-                ? "${_editorController.documentName}${_editorController.fileFormat.isNotEmpty ? '.${_editorController.fileFormat}' : ''}"
-                : "Nuevo Documento*",
-            onOpenPdfViewer: () => openPdfViewer(_editorController.filePath ?? ''),
-          ),
+    return EditorLayout(
+      editorController: _editorController,
+      customButtons: [
+        quill.QuillToolbarCustomButtonOptions(
+          icon: Icon(Icons.save),
+          tooltip: 'Guardar',
+          onPressed: _documentManager.saveDocument,
         ),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: SingleChildScrollView(
-              child: Text(docxContent),
-            ),
-          ),
+        quill.QuillToolbarCustomButtonOptions(
+          icon: Icon(Icons.save_as),
+          tooltip: 'Guardar como',
+          onPressed: _documentManager.saveDocumentAs,
+        ),
+        quill.QuillToolbarCustomButtonOptions(
+          icon: Icon(Icons.folder_open),
+          tooltip: 'Abrir',
+          onPressed: () async {
+            await _documentManager.openDocument();
+            path = _editorController.filePath;
+            setState(() {
+              isDocumentOpen = path != null;
+            });
+
+            if (isDocumentOpen && path != null) {
+              if (path!.endsWith('.pdf')) {
+                openPdfViewer(path!);
+              } else {
+                await loadDocumentContent(path!);
+              }
+            }
+          },
+        ),
+        quill.QuillToolbarCustomButtonOptions(
+          icon: Icon(Icons.picture_as_pdf),
+          tooltip: 'Exportar a PDF',
+          onPressed: () {
+            // Lógica para exportar el documento actual a PDF
+          },
         ),
       ],
+      title: _editorController.documentName.isNotEmpty
+          ? "${_editorController.documentName}${_editorController.fileFormat.isNotEmpty ? '.${_editorController.fileFormat}' : ''}"
+          : "Nuevo Documento*", onOpenPdfViewer: () {  },
     );
   }
 }

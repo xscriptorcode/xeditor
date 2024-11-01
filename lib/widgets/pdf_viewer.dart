@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:pdfx/pdfx.dart' as pdfx;
+import 'package:pdfrx/pdfrx.dart';
 
-class PdfViewer extends StatelessWidget {
+class PdfViewerPage extends StatelessWidget {
   final String pdfPath;
 
-  const PdfViewer({super.key, required this.pdfPath});
+  const PdfViewerPage({Key? key, required this.pdfPath}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final pdfController = pdfx.PdfController(document: pdfx.PdfDocument.openFile(pdfPath));
-
     return Scaffold(
-      appBar: AppBar(title: Text("Vista de PDF")),
-      body: pdfx.PdfView(controller: pdfController),
+      appBar: AppBar(
+        title: const Text('Visor de PDF'),
+      ),
+      body: PdfViewer.file(
+        pdfPath, // Solo pasamos la ruta como cadena de texto
+        params: const PdfViewerParams(
+          minScale: 1.0,
+          maxScale: 3.0,
+        ),
+      ),
     );
   }
 }

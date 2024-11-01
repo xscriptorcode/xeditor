@@ -39,10 +39,6 @@ class EditorLayout extends StatelessWidget {
               ),
             ),
           ),
-          IconButton(
-            icon: Icon(Icons.picture_as_pdf),
-            onPressed: onOpenPdfViewer,
-          ),
         ],
       ),
     );
