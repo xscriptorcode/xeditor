@@ -23,6 +23,8 @@ dependencies:
   pdfx: ^2.8.0
   syncfusion_flutter_pdf: ^27.1.57
   syncfusion_flutter_pdfviewer: ^27.1.57
+  xml: ^6.1.0
+  
 
 
 

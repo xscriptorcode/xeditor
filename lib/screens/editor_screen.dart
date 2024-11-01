@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../widgets/editor_area.dart';
 
 class EditorScreen extends StatelessWidget {
-  const EditorScreen({Key? key}) : super(key: key);
+  const EditorScreen({super.key});
 
   void _handleMenuSelection(String menu) {
     // Manejo de selección en la barra de menú

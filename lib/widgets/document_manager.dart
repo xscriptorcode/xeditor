@@ -40,7 +40,7 @@ class DocumentManager {
       final nameParts = outputFilePath.split('/').last.split('.');
       if (nameParts.length > 1) {
         editorController.documentName = nameParts.sublist(0, nameParts.length - 1).join('.');
-        editorController.fileFormat = '.' + nameParts.last;  // Aseguramos que tiene el punto
+        editorController.fileFormat = '.${nameParts.last}';  // Aseguramos que tiene el punto
       } else {
         editorController.documentName = nameParts[0];
         editorController.fileFormat = '';  // No tiene extensión
@@ -67,7 +67,7 @@ class DocumentManager {
       final nameParts = result.files.single.name.split('.');
       if (nameParts.length > 1) {
         editorController.documentName = nameParts.sublist(0, nameParts.length - 1).join('.');
-        editorController.fileFormat = '.' + nameParts.last;  // Aseguramos que tiene el punto
+        editorController.fileFormat = '.${nameParts.last}';  // Aseguramos que tiene el punto
       } else {
         editorController.documentName = nameParts[0];
         editorController.fileFormat = '';  // No tiene extensión

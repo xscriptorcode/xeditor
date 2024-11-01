@@ -7,7 +7,7 @@ class EditorLayout extends StatelessWidget {
   final List<quill.QuillToolbarCustomButtonOptions> customButtons;
   final VoidCallback onOpenPdfViewer;
 
-  const EditorLayout({
+  const EditorLayout({super.key, 
     required this.editorController,
     required this.customButtons,
     required this.onOpenPdfViewer, required String title,

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class CustomMenuBar extends StatelessWidget {
   final Function(String) onMenuSelected; // Callback para manejar las selecciones
 
-  CustomMenuBar({required this.onMenuSelected});
+  const CustomMenuBar({super.key, required this.onMenuSelected});
 
   @override
   Widget build(BuildContext context) {

@@ -4,7 +4,7 @@ import 'package:pdfx/pdfx.dart' as pdfx;
 class PdfViewer extends StatelessWidget {
   final String pdfPath;
 
-  PdfViewer({required this.pdfPath});
+  const PdfViewer({super.key, required this.pdfPath});
 
   @override
   Widget build(BuildContext context) {
