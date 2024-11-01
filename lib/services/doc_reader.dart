@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:archive/archive_io.dart';
 import 'package:xml/xml.dart';
@@ -30,7 +31,8 @@ class DocumentReader {
     }
   }
 
-  Future<String> readDocxFile(String filePath) async {
+
+Future<String> readDocxFile(String filePath) async {
     try {
       // Leer el archivo .docx como bytes
       final file = File(filePath);
@@ -47,7 +49,14 @@ class DocumentReader {
 
       // Leer el contenido XML de document.xml
       final documentContent = documentFile.content as List<int>;
-      final xmlString = String.fromCharCodes(documentContent);
+      String xmlString;
+
+      // Intentar decodificar usando UTF-8, si falla usa latin1
+      try {
+        xmlString = utf8.decode(documentContent);
+      } catch (e) {
+        xmlString = latin1.decode(documentContent);
+      }
 
       // Parsear el XML y extraer el texto
       final documentXml = XmlDocument.parse(xmlString);
@@ -63,9 +72,10 @@ class DocumentReader {
       return textBuffer.toString();
     } catch (e) {
       print("Error al leer el archivo .docx: $e");
-      return "No se pudo leer el archivo .docx";
+      return ""; // Devuelve una cadena vacía si falla
     }
   }
+
 
   Future<String> readDocument(String filePath) async {
     if (filePath.endsWith('.txt')) {
