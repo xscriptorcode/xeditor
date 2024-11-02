@@ -1,3 +1,4 @@
+// widgets/editor_area.dart
 import 'package:flutter/material.dart';
 import 'package:xeditor/services/doc_reader.dart';
 import 'editor_layout.dart';
